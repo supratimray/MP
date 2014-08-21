@@ -25,14 +25,22 @@
 #include "mpp.h"
 #include "structpath.h"
 #include "cwt1d.h"
-#include <sys/time.h>
+#ifndef WINDOWS
+	#include <sys/time.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <sys/times.h>
-#include <sys/param.h>
-#include <unistd.h>
-#include <strings.h>
+#ifdef WINDOWS
+	#include <WinSock2.h>
+	#include <string.h>
+	#include <io.h>
+#else
+	#include <sys/times.h>
+	#include <sys/param.h>
+	#include <unistd.h>
+	#include <strings.h>
+#endif
 
 
 extern struct inpdef *in;
@@ -152,8 +160,8 @@ int main(argc, argv)
     double *data;
 
     BOOK book;							//temp book for output
-    WORD word;							//temp word from the book
-    INDEX indx;							//temp index from the word
+    WRD wrd;							//temp wrd from the book
+    INDEX indx;							//temp index from the wrd
 	
     int c, nb_chan, nbwind=0, windcount=0;
     int ichan;
@@ -202,7 +210,7 @@ int main(argc, argv)
 	extern double farray_L2_sq_norm();
 	extern BOOK AllocBook();
 	extern BOOK init_book();
-	extern WORD WordListFree();
+	extern WRD WordListFree();
 	extern void GaborBuildBook();
 	extern void GaborBuildBookOld();
 	
@@ -449,7 +457,7 @@ int main(argc, argv)
 		 
 		    if (cur_book==(BOOK)NULL)
 		        cur_book = AllocBook();
-		    if (cur_book->first != (WORD)NULL)
+		    if (cur_book->first != (WRD)NULL)
 		        cur_book->first = WordListFree(cur_book->first);
 		    init_book(cur_book);
  
@@ -600,14 +608,14 @@ int main(argc, argv)
 	  	energy  = sqrt(book->sigen); //should not be sqrt... stay for now for backward coherence in book files
 	  	ou[0].write_chan_data(&ou[0], &energy, 1, ichan, 0);  // Signal Energy
 
-		word = book->first;
+		wrd = book->first;
 		i = 0;
 
-		while (word != NULL)
+		while (wrd != NULL)
 		  {
 		    union {double x; short int ps[4];} uniontemp2;
 
-		    indx = word->index;
+		    indx = wrd->index;
 		  
 		    uniontemp2.ps[0]=i++;
 		    uniontemp2.ps[1]=indx->octave;
@@ -615,10 +623,10 @@ int main(argc, argv)
 		    uniontemp2.ps[3]=indx->position;	 	    
 
 		    ou[0].write_chan_data(&ou[0], &uniontemp2.x, 1, ichan, 0);
-		    ou[0].write_chan_data(&ou[0], &(word->coeff), 1, ichan, 0);
+		    ou[0].write_chan_data(&ou[0], &(wrd->coeff), 1, ichan, 0);
 		    ou[0].write_chan_data(&ou[0], &(indx->phase), 1, ichan, 0);
 	      			
-		    word = word->next;
+		    wrd = wrd->next;
 		  }
 
 			  

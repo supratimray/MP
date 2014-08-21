@@ -15,10 +15,8 @@
 
 function gaborInfo = getGaborData(folderName,tag,channelNum)
 
-folderName=appendIfNotPresent(folderName,'/');
-tag=appendIfNotPresent(tag,'/');
 
-fn = [folderName tag 'GaborMP/mp0.bok.' conv2Str(channelNum-1)];
+fn = fullfile(folderName,tag,['GaborMP/mp0.bok.' conv2Str(channelNum-1)]);
 fd = fopen(fn,'r');
 
 numAtoms=0;

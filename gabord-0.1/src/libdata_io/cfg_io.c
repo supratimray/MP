@@ -7,8 +7,26 @@
 /*  Jan 2003  added interv functions and alias for calib            */
 /* 	$Id: cfg_io.c,v 1.5 2007/05/03 20:58:32 pfranasz Exp $	        */
 /********************************************************************/
+#ifdef WINDOWS
+	#include <stddef.h>
+	#include <string.h>
+	#include <malloc.h>
+char * strndup (const char *s, size_t n)
+{
+  char *result;
+  size_t len = strlen (s);
 
+  if (n < len)
+    len = n;
 
+  result = (char *) malloc (len + 1);
+  if (!result)
+    return 0;
+
+  result[len] = '\0';
+  return (char *) memcpy (result, s, len);
+}
+#endif
 
 #ifndef lint
 static char vcid[] = "$Id: cfg_io.c,v 1.5 2007/05/03 20:58:32 pfranasz Exp $";
@@ -18,7 +36,9 @@ static char vcid[] = "$Id: cfg_io.c,v 1.5 2007/05/03 20:58:32 pfranasz Exp $";
 
 const char cfg_ver[]="1.5";
 extern char *progname,*host;
-extern int errno;
+#ifndef WINDOWS
+	extern int errno;
+#endif
 char *del_list[100];
 
 int del_no=0;

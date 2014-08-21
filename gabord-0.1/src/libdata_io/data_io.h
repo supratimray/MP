@@ -15,7 +15,9 @@
 #include <math.h>
 #include <float.h>
 #include <limits.h>
-#include <unistd.h>
+#ifndef WINDOWS
+	#include <unistd.h>
+#endif
 #include <fcntl.h>
 #include "cfg_io.h"
 

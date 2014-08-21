@@ -19,6 +19,12 @@ end
 
 if isdir(fn)==0
     disp(['Creating directory ',fn]);
-    unixcom = ['mkdir ', fn];
-    unix(unixcom);
+    if ispc
+        % Have to do this separately as mkdir as a dos command cannot have
+        % trailing slashes. BK.
+        mkdir(fn)
+    else
+        unixcom = ['mkdir ', fn];
+        unix(unixcom);
+    end
 end

@@ -158,29 +158,29 @@ int max;
 
 /*--------------------------------------------------------------------------*/
 /*
- * append a word into book
+ * append a wrd into book
  */
 /*--------------------------------------------------------------------------*/
-void BookAppend(book, word)
+void BookAppend(book, wrd)
      BOOK book;
-     WORD word;
+     WRD wrd;
 {
 /* checking the inputs */
 
-if ( book == NULL || word == NULL )
+if ( book == NULL || wrd == NULL )
 	perror("BookAppend: NULL input");	
 
 
   if(book->last == NULL) {
-    book->first = word;
+    book->first = wrd;
     book->last = book->first;
   }
   else {
-    book->last->next = word;
+    book->last->next = wrd;
     book->last = book->last->next;
   }
   book->size = book->size + 1;
-  book->energy += word->coeff*word->coeff;
+  book->energy += wrd->coeff*wrd->coeff;
 }
 
 

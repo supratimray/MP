@@ -36,7 +36,7 @@ INDEX indexG1=(INDEX)NULL, indexG2=(INDEX)NULL;
  *	2. it does not check the validity of 'MacOctave', 'ShiftOctave',
  *	   'SubsampleOctaveTime', 'SubsampleOctaveFreq'.
  */
-WORD GaborGetMaxFrmTrans(trans,filter, MinOctave, MaxOctave, num_octave,SubsampleOctaveTime,
+WRD GaborGetMaxFrmTrans(trans,filter, MinOctave, MaxOctave, num_octave,SubsampleOctaveTime,
 		SubsampleOctaveFreq)
 SIGNAL *trans;
 FILTER *filter;
@@ -45,7 +45,7 @@ int num_octave;
 int SubsampleOctaveTime;
 int SubsampleOctaveFreq;
 {
-    WORD word=(WORD)NULL;
+    WRD wrd=(WRD)NULL;
     int k, j, SampleRate_f, SampleRate_n;
     long SigSize, HalfSigSize, DoubleSigSize;
     int freq, bndBadK;
@@ -58,7 +58,7 @@ int SubsampleOctaveFreq;
     double *pointer;
     int LnSigSize;
     double GaborGetGaborNorm();
-    WORD AllocWord();
+    WRD AllocWord();
     void SigAbsMx(), GaborArrayMax();
     extern void complex_array_max();
 
@@ -165,31 +165,31 @@ if ( (MinOctave == 1) && (MaxOctave == LnSigSize - 1) )
 		}
 	}
 /*
- * install the maximum information into word
+ * install the maximum information into wrd
  */
-    word = AllocWord();
+    wrd = AllocWord();
     if (MaxOct == (double)LnSigSize) /* Fourier basis */
 	{
 	if (MaxFreq==0.0 || MaxFreq==(double)HalfSigSize)
 	    { 
 	    MaxNorm = 1.0/sqrt((double)SigSize);
-	    word->value = MaxNorm;
+	    wrd->value = MaxNorm;
 	    }
 	else
 	    {
 	    MaxNorm = M_SQRT2/sqrt((double)SigSize);
-	    word->value = MaxNorm;
+	    wrd->value = MaxNorm;
 	    } 
 	}
     else if (MaxOct==0) /* Dirac basis */
-        word->value = MaxNorm;
+        wrd->value = MaxNorm;
     else /* Gabor functions */
 	{
 	MaxNorm = GaborGetGaborNorm(
 			MaxModula,MaxReal,MaxImg,SigSize,
 			LnSigSize,(int)MaxOct,(long)MaxFreq,
 			(long)MaxTranslation);
-	word->value = MaxNorm;
+	wrd->value = MaxNorm;
 	}
 
 
@@ -208,50 +208,50 @@ if ( (MinOctave == 1) && (MaxOctave == LnSigSize - 1) )
 	    MaxReal *= M_SQRT2;
 	    }
 	}
-    word->coeff = MaxModula;
+    wrd->coeff = MaxModula;
     if (MaxImg>0)
-	word->index->phase = acos(MaxReal/MaxModula);
+	wrd->index->phase = acos(MaxReal/MaxModula);
     else
-	word->index->phase = -acos(MaxReal/MaxModula);
-    word->index->id = MaxFreq;
-    word->index->octave = MaxOct;
-    word->index->position = MaxTranslation;
+	wrd->index->phase = -acos(MaxReal/MaxModula);
+    wrd->index->id = MaxFreq;
+    wrd->index->octave = MaxOct;
+    wrd->index->position = MaxTranslation;
 
-    return(word);
+    return(wrd);
 }
 /*
  *
- * Get residue for trans from a word
+ * Get residue for trans from a wrd
  *
  * Inputs:
  *	trans		transformation for the gabor library (SIGNAL *)
  *	filter		the basic gabor functions	(FILTER *)
- *	word		word selected from trans (WORD)
+ *	wrd		wrd selected from trans (WRD)
  *
  * Output:
  *	trans[0]	residue of the project persuit (SIGNAL)
  *
  */
-void GaborGetResidue(trans,filter,word,num_octave)
+void GaborGetResidue(trans,filter,wrd,num_octave)
 SIGNAL *trans;
 FILTER *filter;
-WORD word;
+WRD wrd;
 int num_octave;
 {
     int i, shift, index, index1, SigSize, octave, freq;
     double cos_phi, sin_phi, *value, tmp;
 
-    if (trans == (SIGNAL *)NULL || word == (WORD)NULL)
+    if (trans == (SIGNAL *)NULL || wrd == (WRD)NULL)
 	perror("GaborGetResidue(): null input!");
     if (trans[0] == (SIGNAL)NULL)
 	perror("GaborGetResidue(): internal error!");
 
     SigSize = trans[0]->size>>1;
-    cos_phi = cos((double)word->index->phase);
-    sin_phi = sin((double)word->index->phase);
-    shift = (int)word->index->position;
-    octave = (int)word->index->octave;
-    freq = (int)word->index->id;
+    cos_phi = cos((double)wrd->index->phase);
+    sin_phi = sin((double)wrd->index->phase);
+    shift = (int)wrd->index->position;
+    octave = (int)wrd->index->octave;
+    freq = (int)wrd->index->id;
 
     if (shift > SigSize || shift < 0)
 	perror("GaborGetResidue(): illegal translation number!");
@@ -263,8 +263,8 @@ int num_octave;
 	/*
 	 * the case of dirac basis
 	 */
-	word->value = 1.0;
-	trans[0]->values[(int)word->index->position] = 0.0;
+	wrd->value = 1.0;
+	trans[0]->values[(int)wrd->index->position] = 0.0;
 	return;
 	}
     value = trans[0]->values;
@@ -276,7 +276,7 @@ int num_octave;
 	/*
 	 * normalize the basis
 	 */
-	tmp = word->coeff*word->value;
+	tmp = wrd->coeff*wrd->value;
 	for (i=0;i<SigSize;i++)
 	    {
 	    index = (freq*i)%SigSize;
@@ -289,7 +289,7 @@ int num_octave;
 /*
  * the case of the gabor fuctions
  */
-    tmp = word->coeff*word->value;
+    tmp = wrd->coeff*wrd->value;
     for (i=0;i<SigSize;i++)
 	{
 	index = (freq*i)%SigSize;
@@ -445,7 +445,7 @@ int nS;
  * get the waveform
  *
  * Inputs:
- *	word		the information of the waveform (coeff, index, etc) (WORD)
+ *	wrd		the information of the waveform (coeff, index, etc) (WRD)
  *	pfFilter	the filter for the decomposition (FILTER *)
  *	N		the signal size (int)
  *	L		the maximum octave (int)
@@ -453,8 +453,8 @@ int nS;
  * Output:
  *	sWvForm		the signal of the corresponding wave form (SIGNAL)
  */
-SIGNAL GaborGetWaveForm(word,pfFilter,N,L)
-WORD word;
+SIGNAL GaborGetWaveForm(wrd,pfFilter,N,L)
+WRD wrd;
 FILTER *pfFilter;
 int N;
 int L;
@@ -463,12 +463,12 @@ int L;
     double cos_phi, sin_phi, *v, norm;
     SIGNAL signal, new_signal();
 
-    octave = (int)word->index->octave;
-    position = (int)word->index->position;
-    freq = (int)word->index->id;
-    norm = word->value;
-    cos_phi = norm*cos((double)word->index->phase);
-    sin_phi = norm*sin((double)word->index->phase);
+    octave = (int)wrd->index->octave;
+    position = (int)wrd->index->position;
+    freq = (int)wrd->index->id;
+    norm = wrd->value;
+    cos_phi = norm*cos((double)wrd->index->phase);
+    sin_phi = norm*sin((double)wrd->index->phase);
     signal = new_signal(N);
     v = signal->values;
 /*
@@ -476,7 +476,7 @@ int L;
  */
     if (octave==0)
 	{
-	if (fabs((double)word->index->phase) < 1.0e-5)
+	if (fabs((double)wrd->index->phase) < 1.0e-5)
 	    v[position] = 1.0;
 	else
 	    v[position] = -1.0;
@@ -520,7 +520,7 @@ int L;
  * Newton method to refine the maxima in the finer grid
  *
  * Inputs:
- * word:	selected word in the coarse grid (WORD)
+ * wrd:	selected wrd in the coarse grid (WRD)
  * trans:	transformation matrix (SIGNAL *)
  * L:		log2(N)
  * l:		subsample level in time in the fine grid (int)
@@ -529,10 +529,10 @@ int L;
  * hc:		subsample level in frequency in the coarse grid (int)
  *
  * Output:
- * word:	the selected word after refinement (WORD)
+ * wrd:	the selected wrd after refinement (WRD)
  */
-void getMaxFrmNewton(word,trans,filter, MinOctave, MaxOctave, L,l,h,lc,hc)
-WORD word;
+void getMaxFrmNewton(wrd,trans,filter, MinOctave, MaxOctave, L,l,h,lc,hc)
+WRD wrd;
 SIGNAL *trans;
 FILTER *filter;
 int MaxOctave; /* Max octave used in the decomposition over gabor functions */
@@ -555,11 +555,11 @@ int hc;
     int getNbhd();
     void innSigWvForm();
 
-    j = (int)word->index->octave;
+    j = (int)wrd->index->octave;
     if (j==0 || j==L)
 	return;
-    k = (long)word->index->id;
-    p = (long)word->index->position;
+    k = (long)wrd->index->id;
+    p = (long)wrd->index->position;
     N = 1<<L;
     N2 = N>>1;
 
@@ -620,23 +620,23 @@ int hc;
     innSigWvForm(trans[0],filter,jm,km,pm,L,&vr,&vi);
     modula = vr*vr+vi*vi;
     /*
-     * install the selected wave form into word
+     * install the selected wave form into wrd
      */
     nrm = GaborGetGaborNorm(modula,vr,vi,N,L,
 			jm,km,pm);
     modula = sqrt(modula);
     coeff = modula*nrm;
-    if (coeff < word->coeff)
+    if (coeff < wrd->coeff)
 	return;
-    word->coeff = coeff;
-    word->value = nrm;
+    wrd->coeff = coeff;
+    wrd->value = nrm;
     if (vi>0.0)
-	word->index->phase = acos(vr/modula);
+	wrd->index->phase = acos(vr/modula);
     else
-	word->index->phase = -acos(vr/modula);
-    word->index->octave = (double)jm;
-    word->index->id = (double)km;
-    word->index->position = (double)pm;
+	wrd->index->phase = -acos(vr/modula);
+    wrd->index->octave = (double)jm;
+    wrd->index->id = (double)km;
+    wrd->index->position = (double)pm;
 
     return;
 }

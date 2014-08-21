@@ -24,7 +24,11 @@
 const char dataio_ver[]="$Revision: 1.21 $";
 extern char cfg_ver[];
 extern char version[];
-extern long timezone;
+#ifdef WINDOWS
+	#include <WinSock2.h>
+#else
+	extern long timezone;
+#endif
 char *progname;
 char hst[100];
 char *host=hst; 
@@ -222,7 +226,7 @@ int prec(double x)
     b=u.n[0];
     u.n[0]=u.n[1];
     u.n[1]=b;
-    swab(&u,&u,4);
+    swab(&u,&u,4); 
 #endif
     count=0;
     if((b=u.n[1]))
@@ -1010,7 +1014,7 @@ int write_list_line(struct outdef *out)
     t=(time_t)(out->start);
     tim=gmtime(&t);
 
-    strftime(time,30,"%a %e %b %Y %H:%M",tim); 
+    strftime(time,30,"%a %d %b %Y %H:%M",tim); 
     tim->tm_hour=tim->tm_min=tim->tm_sec=0;
     tod=out->start-mktime(tim)+timezone;
     
@@ -1430,7 +1434,7 @@ void decode_tf(short *buffer, int n, int m)
   
     int i,k=3*n/4+4;  //size of packed buffer (alarm +sync are 4 bytes)
     BYTE *buf=(BYTE*)buffer+(m-1)*k;
-    register ushort *w=(ushort*)buffer + m*n/2+1; // points to last word +2 (4 bytes extra)
+    register ushort *w=(ushort*)buffer + m*n/2+1; // points to last wrd +2 (4 bytes extra)
     short alarm,sync;
     int pos=sync_cur+m-1;
   
@@ -2852,8 +2856,9 @@ int read_cfg(char *fname, struct section *head)
 		    inp_def.pos=0;
 		  
 		   
-		    if(h_fmt.file_fmt==bin_edf && (h_fmt.nchans==1 || h_fmt.no_of_vars==1))
+		    if(h_fmt.file_fmt==bin_edf && (h_fmt.nchans==1 || h_fmt.no_of_vars==1)){
 			inp_def.file_fmt==bin_short;
+			}
 
 		    switch(inp_def.file_fmt)
 		    {
@@ -3623,7 +3628,13 @@ int init_io(int argc,char **argv, struct section *list, int flag)
     struct outdef *out;
  
     progname=argv[0];
+
+#ifdef WINDOWS
+	gethostbyname(host);
+#else
     gethostname(host,100);
+#endif
+
 
     if(argc <2 || argc >3 || (argc==3 && strcmp(argv[2],"-r")))
     {

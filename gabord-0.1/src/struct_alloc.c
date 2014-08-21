@@ -53,22 +53,22 @@ BOOK book;
    book->smin = 0.;
    book->smax = 0.;
    book->sig_size= 0; 
-   book->first = (WORD)NULL;
-   book->last = (WORD)NULL;
+   book->first = (WRD)NULL;
+   book->last = (WRD)NULL;
 }
 
 /*--------------------------------------------------------------------------*/
 /*
- * allocate WORD
+ * allocate WRD
  */
 /*--------------------------------------------------------------------------*/
-WORD AllocWord()
+WRD AllocWord()
 {
-   WORD str;
+   WRD str;
    void init_word();
 
-   if(!(str = (WORD) (malloc(sizeof(struct word)))))
-	error("Mem. alloc for WORD failed\n");
+   if(!(str = (WRD) (malloc(sizeof(struct wrd)))))
+	error("Mem. alloc for WRD failed\n");
 
    str->index = (INDEX)NULL;
    init_word(str);
@@ -78,22 +78,22 @@ WORD AllocWord()
 
 /*--------------------------------------------------------------------------*/
 /*
- * initialize the word
+ * initialize the wrd
  */
 /*--------------------------------------------------------------------------*/
 void init_word(strt)
-WORD strt;
+WRD strt;
 {
     INDEX AllocIndex();
     void init_index();
 
-    if (strt != (WORD)NULL)
+    if (strt != (WRD)NULL)
 	{
 	strt->coeff = 0.0;
 	strt->value = 0.0;
 	strt->coeff1= 0.0;
 	strt->value1= 0.0;
-	strt->next = (WORD)NULL; /* wen */
+	strt->next = (WRD)NULL; /* wen */
 	if (strt->index == (INDEX)NULL)
 	   strt->index = AllocIndex();
 	else
@@ -150,7 +150,7 @@ INDEX index;
 clear_book(book)
 BOOK book;
 {
-    WORD WordListFree();
+    WRD WordListFree();
 
     if (book == (BOOK)NULL)
 	warning("null argument for clear_book()!");
@@ -163,39 +163,39 @@ BOOK book;
 
 /*--------------------------------------------------------------------------*/
 /*
- * deallocate the WORD structure
+ * deallocate the WRD structure
  */
 /*--------------------------------------------------------------------------*/
-WORD WordFree(strt)
-WORD strt;
+WRD WordFree(strt)
+WRD strt;
 {
    INDEX IndexFree();
 
-   if (strt == (WORD)NULL)
+   if (strt == (WRD)NULL)
 	warning("null argument for WordFree()!");
 
    strt->index = IndexFree(strt->index);
    free((char *)strt);
-   return((WORD)NULL);
+   return((WRD)NULL);
 }
 
 /*--------------------------------------------------------------------------*/
 /*
- * deallocate the WORD list
+ * deallocate the WRD list
  */
 /*--------------------------------------------------------------------------*/
-WORD WordListFree(word)
-WORD word;
+WRD WordListFree(wrd)
+WRD wrd;
 {
-   WORD WordFree();
+   WRD WordFree();
 
-   if (word != (WORD)NULL)
-        word->next = WordListFree(word->next);
+   if (wrd != (WRD)NULL)
+        wrd->next = WordListFree(wrd->next);
    else
-        return(word);
+        return(wrd);
  
-   word = WordFree(word);
-   return((WORD)NULL);
+   wrd = WordFree(wrd);
+   return((WRD)NULL);
 }
 
 /*--------------------------------------------------------------------------*/

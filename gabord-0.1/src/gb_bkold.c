@@ -36,26 +36,26 @@ int	SubsampleOctaveFreq;
 double	LamdaNoise;
 {
     //double lamda=(-1.0), resen1, resen2;
-    WORD word;
-    WORD GaborGetMaxFrmTrans();
+    WRD wrd;
+    WRD GaborGetMaxFrmTrans();
     SIGNAL *GaborDecomp();
     void BookAppend(), GaborGetResidue();
 
     if (trans == (SIGNAL *)NULL || book == (BOOK)NULL)
 	perror("GaborBuildBook(): null arguments!");
 /*
- * get the maximum from the trans and put it into word
+ * get the maximum from the trans and put it into wrd
  */
-    word = GaborGetMaxFrmTrans(trans,filter, 1, num_octave - 1, num_octave,SubsampleOctaveTime,
+    wrd = GaborGetMaxFrmTrans(trans,filter, 1, num_octave - 1, num_octave,SubsampleOctaveTime,
 		SubsampleOctaveFreq);
 /*
  * get the residue
  */
-    GaborGetResidue(trans,filter,word,num_octave);
+    GaborGetResidue(trans,filter,wrd,num_octave);
 /*
- * put the word into book
+ * put the wrd into book
  */
-    BookAppend(book,word);
+    BookAppend(book,wrd);
 /*
  * calculate the residue transform
  */

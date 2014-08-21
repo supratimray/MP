@@ -26,9 +26,11 @@
 #define MAX_FILE_NAME 200
 #define NAME_LEN 50
 
-
-#define BYTE unsigned char
-
+#ifdef WINDOWS
+	#include <Windows.h>
+#else
+	#define BYTE unsigned char
+#endif
 
 // aliases for lists of double numbers
 #define numbers_in  calib_in

@@ -24,7 +24,8 @@ inputSignal(:,3,2) = Y2 + 1*randn(1,L);
 
 
 % specify folderName and tag
-folderName = [pwd '/data/'];
+% ON WINDOWS MACHINES, USE A RELATIVE PATH (i.e. without c:\ in the path).
+folderName = ['./temp/data/'];
 tag = 'test/';
 
 % Import the data

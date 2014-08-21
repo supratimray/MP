@@ -44,7 +44,7 @@
  *
  * Inputs:
  *      trans	gabor transform (SIGNAL *)
- *      word    the word selected (WORD)
+ *      wrd    the wrd selected (WRD)
  *      L       $2^L$ is the signal size (int)
  *      l       subsampling octave for time domain (int)
  *      h       subsampling octave for the frequency domain (int)
@@ -65,11 +65,11 @@
  * 	the fine grid and the second wave form (j2,k2,p2) corresponding to
  *	the coarse grid
  */
-void UpdateGabor(trans,word, MinOctave, MaxOctave, L,l,h,
+void UpdateGabor(trans,wrd, MinOctave, MaxOctave, L,l,h,
 		lf, hf,pfG,pfC,pfFilterNorm,
 		pfFilter,pfB,pfCE1,pnIep)
 SIGNAL *trans;
-WORD word;
+WRD wrd;
 int MinOctave, MaxOctave; /* Min and Max octave for the decomposition on Gabor functions */
 int L;
 int l, h;	/* oversampling octaves on the coarse grid */
@@ -138,10 +138,10 @@ int *pnIep; //back to int for 64bits
 
     sqrtN = sqrt((double)N);
 /*
- * get the information for the selected word
+ * get the information for the selected wrd
  */
-    index = word->index;
-    coeff = word->coeff*word->value;
+    index = wrd->index;
+    coeff = wrd->coeff*wrd->value;
     phi = index->phase;
     p1 = (long)index->position;
     k1 = (long)index->id;
@@ -151,7 +151,7 @@ int *pnIep; //back to int for 64bits
     h1 = SSFACTOR(Lj1,hf);
     maxlh = MAX(MAX(l,h),MAX(lf,hf));
 /*
- * case 1: the selected word is dirac
+ * case 1: the selected wrd is dirac
  */
     if (j1==0)
         {
@@ -201,7 +201,7 @@ int *pnIep; //back to int for 64bits
         return;
         } /* end of j1==0 */
 /*
- * case 2: the selected word is Fourier
+ * case 2: the selected wrd is Fourier
  */
     cos_phi = coeff*cos(phi)/2.0;
     sin_phi = coeff*sin(phi)/2.0;
@@ -281,7 +281,7 @@ int *pnIep; //back to int for 64bits
 	return;
 	} /* end of the Fourier case */
 /*
- * case 3: the selected word is Gabor
+ * case 3: the selected wrd is Gabor
  */
 /*
  * DEBUG
@@ -658,8 +658,8 @@ double cR, cI;
     long N=1<<L;
     long dk, dp;
     int m, q;
-    long k2, p2, k2N, p2N;
-    long k20, p20, k2N0, p2N0;
+    long k2=0, p2=0, k2N=0, p2N=0;
+    long k20=0, p20=0, k2N0=0, p2N0=0;
     long pMaxIndx, kMaxIndx;
     long kpIndxReal, kpIndx0Real, kpNIndxReal, kpNIndx0Real;
     long kpIndxImag, kpIndx0Imag, kpNIndxImag, kpNIndx0Imag;

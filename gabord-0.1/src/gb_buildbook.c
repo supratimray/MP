@@ -1,8 +1,12 @@
 #include "mpp.h"
 #include "cwt1d.h"
 #include <sys/types.h>
-#include <sys/times.h>
-#include <sys/param.h>
+#ifdef WINDOWS
+	#include <WinSock2.h>
+#else
+	#include <sys/times.h>
+	#include <sys/param.h>
+#endif
 /* real part of complex multiplication */
 #define CMREAL(a1,b1,a2,b2)	((a1)*(a2)-(b1)*(b2))
 /* imaginary part of complex multiplication */
@@ -53,9 +57,9 @@ double	*pfFilterNorm;
 {
 
     extern void GaborGetResidue();
-    WORD word;
+    WRD wrd;
 
-    WORD GaborGetMaxFrmTrans();
+    WRD GaborGetMaxFrmTrans();
     SIGNAL *GaborDecomp();
     extern void BookAppend(), UpdateGabor(), GaborUpdateFourier();
     void getMaxFrmNewton();
@@ -63,41 +67,41 @@ double	*pfFilterNorm;
     if (trans == (SIGNAL *)NULL || book == (BOOK)NULL)
 	perror("GaborBuildBook(): null arguments!");
 	
-/* get the maximum from the trans and put it into word*/
+/* get the maximum from the trans and put it into wrd*/
 
-    word = GaborGetMaxFrmTrans(trans,filter, MinOctave, MaxOctave, LnSize,SubsampleOctaveTime,
+    wrd = GaborGetMaxFrmTrans(trans,filter, MinOctave, MaxOctave, LnSize,SubsampleOctaveTime,
 		SubsampleOctaveFreq);
 
-    if (word->index->octave != 0.0 
-	&& word->index->octave != (double)LnSize
+    if (wrd->index->octave != 0.0 
+	&& wrd->index->octave != (double)LnSize
 	&& (l>SubsampleOctaveTime || h>SubsampleOctaveFreq))
-	getMaxFrmNewton(word,trans,filter, MinOctave, MaxOctave, LnSize,l-1,h-1,
+	getMaxFrmNewton(wrd,trans,filter, MinOctave, MaxOctave, LnSize,l-1,h-1,
 		SubsampleOctaveTime-1,
 		SubsampleOctaveFreq-1);
 
 /* update the transform */
  
-    GaborGetResidue(trans,filter,word,LnSize);
+    GaborGetResidue(trans,filter,wrd,LnSize);
 
-    UpdateGabor(trans,word, MinOctave, MaxOctave, LnSize,
+    UpdateGabor(trans,wrd, MinOctave, MaxOctave, LnSize,
 		SubsampleOctaveTime-1,SubsampleOctaveFreq-1,l-1,h-1,
 		pfG,pfC,pfFilterNorm,filter,pfB,pfCE1,pnIep);
 
-   GaborUpdateFourier(trans,filter,word, MinOctave, MaxOctave, LnSize);		
+   GaborUpdateFourier(trans,filter,wrd, MinOctave, MaxOctave, LnSize);		
 
-/* put the word into book */
+/* put the wrd into book */
 
-    BookAppend(book,word);
+    BookAppend(book,wrd);
     return;
 }
 
 
 ////// update the Fourier basis
  
-void GaborUpdateFourier(trans,filter,word, MinOctave, MaxOctave, L)
+void GaborUpdateFourier(trans,filter,wrd, MinOctave, MaxOctave, L)
 SIGNAL *trans;
 FILTER *filter;
-WORD word;
+WRD wrd;
 int	MinOctave, MaxOctave; /* Min and Max octave for the decomposition on Gabor functions */
 int L;
 {
@@ -108,11 +112,11 @@ int L;
     long k2, N;
 
     N = (trans[0]->size)>>1;
-    j1 = word->index->octave;
-    k1 = word->index->id;
-    p1 = word->index->position;
-    phi1 = word->index->phase;
-    coeff = word->coeff*word->value;
+    j1 = wrd->index->octave;
+    k1 = wrd->index->id;
+    p1 = wrd->index->position;
+    phi1 = wrd->index->phase;
+    coeff = wrd->coeff*wrd->value;
     v1r = trans[MaxOctave - MinOctave + 2]->values;
     v1i = v1r+N;
     if (j1==0)

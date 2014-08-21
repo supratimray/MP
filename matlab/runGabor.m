@@ -18,7 +18,8 @@
 
 function runGabor(foldername,tag,Numb_points, Max_iterations)
 
-sourcefolder = '/Users/sray/Research/timeFrequency/mpp/MP/source/';
+executable  = ['"' fullfile(fileparts(mfilename('fullpath')),'source','gabord.exe') '"'];
+
 
 if ~exist('Numb_points')        Numb_points=1024;       end
 if ~exist('Max_iterations')     Max_iterations=500;     end
@@ -75,5 +76,5 @@ fprintf(fp,'%s%d\n','Max_Iterations=',Max_iterations);
 fclose(fp);
 
 % Run the GaborMP program (Call the gabord function)
-commandline = [sourcefolder 'gabord ' filename];
+commandline = [executable ' ' filename];
 unix(commandline)

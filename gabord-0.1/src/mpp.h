@@ -13,9 +13,15 @@
 #include <stdio.h>  /* Basic include files */
 #include <ctype.h>
 #include <string.h>
-#ifndef Solaris
-#include <strings.h>
+#ifndef Solaris 
+	#ifndef WINDOWS
+		#include <strings.h>
+	#endif
 #endif
+#ifdef WINDOWS
+	#define _USE_MATH_DEFINES
+#endif
+
 #include <math.h>
 #include <malloc.h>
 #ifdef sparc
@@ -136,23 +142,23 @@ typedef struct index{
   double phase;		/* phase for of the structure */
 } *INDEX;
 /*
- *       WORD
+ *       WRD
  */
-typedef struct word{
+typedef struct wrd{
 double coeff; /* coefficient value (real part) */
-double value; /* value of the word */
+double value; /* value of the wrd */
 double coeff1;
 double value1;
 int   status; /* either KEPT or DISCARD */
 INDEX index; /* index which contains which frequency, position, and scale. */
-struct word *next; /* next node */
-} *WORD;
+struct wrd *next; /* next node */
+} *WRD;
 /*
  *       BOOK
  */
 typedef struct book{
-  WORD first;	   /* first element in the list */
-  WORD last;	   /* last element in the list */
+  WRD first;	   /* first element in the list */
+  WRD last;	   /* last element in the list */
   int size;        /* number of structures in structure book */
   double energy;    /* energy of structure book representation */
   double sigen;     /* energy of signal */
@@ -234,7 +240,7 @@ extern int num_filter[MAX_NUM_SB];
 extern char *check_format();
 extern SIGNAL *AllocFilter();
 extern INDEX AllocIndex();
-extern WORD AllocWord();
+extern WRD AllocWord();
 extern BOOK AllocBook();
 
 extern int plot_var;
