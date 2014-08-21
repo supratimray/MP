@@ -20,12 +20,12 @@
 
 function [signal,t,normSignal] = reconstructAtom(oct,u,ksi,fi,N,range)
 
-if ~exist('range')          range=[];           end
+if ~exist('range','var'),          range=[];           end
 
 if isempty(range)
     t=0:N-1;
 else
-    if ((range(1) < 0) | range(2) > N-1)
+    if ((range(1) < 0) || range(2) > N-1)
         error('limits out of range. Change the range variable');
     else
         t=range(1):range(2);

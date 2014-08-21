@@ -19,7 +19,7 @@ WV{6} = exp(-2*pi*scale^2*((freqVals+N)/N +centerFreq).^2);
 
 sumWV =zeros(1,length(freqVals));
 
-colornames = ['bcgrmy'];
+colornames = 'bcgrmy';
     
 for i=1:6
     plot(freqVals,WV{i},colornames(i)); hold on

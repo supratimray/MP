@@ -23,7 +23,7 @@
 
 function [E,f,normE2] = wignerVille(oct,u,ksi,nFFT,range,limitFreq)
 
-if ~exist('limitFreq','var')           limitFreq=1;             end
+if ~exist('limitFreq','var'),           limitFreq=1;             end
 
 if ksi > nFFT/2
     disp( 'ksi should not exceed nFFT/2,taking mirror image');

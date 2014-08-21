@@ -6,23 +6,24 @@
 % Numb_points is the length of the signal in points (default = 1024);
 % Max_iterations = maximum number of Gabor atoms for each signal. (default 500)
 
-% Note:
-% Please change the sourcefolder variable on line 21 to the folder where
-% the executable gabord is located.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Supratim Ray, 2008 
 % Distributed under the General Public License.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Updates
+% 20/8/14: Minor changes to make the code work on all platforms
 
-function runGabor(foldername,tag,Numb_points, Max_iterations)
+function runGabor(foldername,tag,Numb_points,Max_iterations)
 
-executable  = ['"' fullfile(fileparts(mfilename('fullpath')),'source','gabord.exe') '"'];
+if ispc
+    executable = ['"' fullfile(platformSpecificName(removeIfPresent(fileparts(mfilename('fullpath')),'matlab')),'source','gabord.exe') '"'];
+else
+    executable = fullfile(platformSpecificName(removeIfPresent(fileparts(mfilename('fullpath')),'matlab')),'source','gabord');
+end
 
-
-if ~exist('Numb_points')        Numb_points=1024;       end
-if ~exist('Max_iterations')     Max_iterations=500;     end
+if ~exist('Numb_points','var'),        Numb_points=1024;       end
+if ~exist('Max_iterations','var'),     Max_iterations=500;     end
 
 foldername=appendIfNotPresent(foldername,'/');
 tag=appendIfNotPresent(tag,'/');
@@ -39,7 +40,6 @@ Shift_points = Numb_points;
 filename = [fnin 'ImportData_SIG/sig.hdr'];
 Numb_chans = getFromFile(filename,'Numb_chans');
 All_chans = Numb_chans;
-
 
 % Create the control file (called local.ctl)
 filename = [fn 'local.ctl'];
@@ -77,4 +77,5 @@ fclose(fp);
 
 % Run the GaborMP program (Call the gabord function)
 commandline = [executable ' ' filename];
-unix(commandline)
+unix(commandline);
+end

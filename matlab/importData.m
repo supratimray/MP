@@ -27,19 +27,19 @@ function importData(X,folderName,tag,signalRange,Fs,channelLabels)
 sizeX = size(X);
 if length(sizeX) == 2
     % just one Channel;
-    L = sizeX(1); M = sizeX(2); N = 1;
+    L = sizeX(1); N = 1; % M = sizeX(2); 
 else
-    L = sizeX(1); M = sizeX(2); N = sizeX(3);
+    L = sizeX(1); N = sizeX(3); % M = sizeX(2); 
 end
 
 if ~exist('folderName','var')
     folderName = [pwd '/data/'];
 end
 
-if ~exist('tag','var')                  tag = 'test/';                  end
-if ~exist('signalRange','var')          signalRange = [1 L];            end
-if ~exist('Fs','var')                   Fs = 1000;                      end
-if ~exist('channelLabels','var')        channelLabels = 1:N;            end
+if ~exist('tag','var'),                  tag = 'test/';                  end
+if ~exist('signalRange','var'),          signalRange = [1 L];            end
+if ~exist('Fs','var'),                   Fs = 1000;                      end
+if ~exist('channelLabels','var'),        channelLabels = 1:N;            end
 
 
 folderName=appendIfNotPresent(folderName,'/');

@@ -10,13 +10,12 @@
 % Supratim Ray, 2008 
 % Distributed under the General Public License.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
+% Updates
+% 20/8/14: Minor changes to make the code work on all platforms
 
 function gaborInfo = getGaborData(folderName,tag,channelNum)
 
-
-fn = fullfile(folderName,tag,['GaborMP/mp0.bok.' conv2Str(channelNum-1)]);
+fn = platformSpecificName(fullfile(folderName,tag,['GaborMP/mp0.bok.' conv2Str(channelNum-1)]));
 fd = fopen(fn,'r');
 
 numAtoms=0;
@@ -24,14 +23,14 @@ trialNum=1;
 
 while (~isempty(numAtoms))
     
-    junk=fread(fd,1,'int'); % nvars
-    junk=fread(fd,1,'int'); % window numb
+    fread(fd,1,'int'); % nvars
+    fread(fd,1,'int'); % window numb
     numAtoms=fread(fd,1,'int'); %no of atoms
     sigE=fread(fd,1,'double');
     sigE=sigE^2;
     
     if (~isempty(numAtoms))       
-        gaborInfo{trialNum}.numAtoms    = numAtoms;
+        gaborInfo{trialNum}.numAtoms    = numAtoms; %#ok<*AGROW>
         gaborInfo{trialNum}.sigE        = sigE;
         
         x=zeros(5,numAtoms);

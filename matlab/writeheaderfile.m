@@ -23,9 +23,9 @@ end
 labels = EDF.Label;
 for i = 1:length(goodchannels)
     tmpL = labels(goodchannels(i),:);
-    d = max(find(tmpL(3:7) == ' '))+3;
-    allL(i,:) = tmpL(d:d+2);
-    allnum(i,:) = str2num(tmpL(d+3:d+6));
+    d = find(tmpL(3:7) == ' ', 1, 'last')+3;
+    allL(i,:) = tmpL(d:d+2); %#ok<*AGROW>
+    allnum(i,:) = str2num(tmpL(d+3:d+6)); %#ok<*ST2NM>
 end
 
 % Open the file

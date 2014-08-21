@@ -24,7 +24,7 @@
 
 function [sumEnergy] = reconstructEnergyFromAtomsMPP(gaborData,N,wrap,atomList)
 
-if ~exist('atomList','var')         atomList=[];                        end
+if ~exist('atomList','var'),         atomList=[];                        end
 
 if isempty(atomList)
     atomList = 1:size(gaborData,2);   
@@ -62,8 +62,8 @@ for i=1:length(atomList)
             range = [0 N-1];
             if wrap
                 [E0,f] = wignerVille(oct,u,ksi,nFFT,range,limitFreq);
-                [E1,f] = wignerVille(oct,u-N,ksi,nFFT,range,limitFreq);
-                [E2,f] = wignerVille(oct,u+N,ksi,nFFT,range,limitFreq);
+                E1 = wignerVille(oct,u-N,ksi,nFFT,range,limitFreq);
+                E2 = wignerVille(oct,u+N,ksi,nFFT,range,limitFreq);
                 E = (E0+E1+E2);
                 normE = sum(sum(E));
                 sumEnergy(f+1,:) = mod2*E/normE + sumEnergy(f+1,:);
@@ -84,7 +84,7 @@ for i=1:length(atomList)
                     r0 = [0 u+s2];
                     [E0,f,normE20] = wignerVille(oct,u,ksi,nFFT,r0,limitFreq);
                     r1 = [N-1-(s2-u) N-1];
-                    [E1,f,normE21] = wignerVille(oct,u+N,ksi,nFFT,r1,limitFreq);
+                    [E1,~,normE21] = wignerVille(oct,u+N,ksi,nFFT,r1,limitFreq);
                     normE2 = normE20+normE21;
                     
                     sumEnergy(f+1,1+(r0(1):r0(2))) = mod2*E0/normE2 + sumEnergy(f+1,1+(r0(1):r0(2)));
@@ -94,7 +94,7 @@ for i=1:length(atomList)
                     r0 = [u-s2 N-1];
                     [E0,f,normE20] = wignerVille(oct,u,ksi,nFFT,r0,limitFreq);
                     r1 = [0 u+s2 - (N-1)];
-                    [E1,f,normE21] = wignerVille(oct,u-N,ksi,nFFT,r1,limitFreq);
+                    [E1,~,normE21] = wignerVille(oct,u-N,ksi,nFFT,r1,limitFreq);
                     normE2 = normE20+normE21;
                     
                     sumEnergy(f+1,1+(r0(1):r0(2))) = mod2*E0/normE2 + sumEnergy(f+1,1+(r0(1):r0(2)));

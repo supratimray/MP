@@ -24,7 +24,7 @@
 
 function [signal] = reconstructSignalFromAtomsMPP(gaborData,N,wrap,atomList)
 
-if ~exist('atomList','var')         atomList=[];                        end
+if ~exist('atomList','var'),         atomList=[];                        end
 
 if isempty(atomList)
     atomList = 1:size(gaborData,2);  
@@ -66,7 +66,7 @@ for i=1:length(atomList)
                 normS = sqrt(sum(S.^2));
                 signal = mod*S/normS + signal;
             else
-                [S,t,normS] = reconstructAtom(oct,u,ksi,fi,N,range);
+                [S,~,normS] = reconstructAtom(oct,u,ksi,fi,N,r);
                 signal = mod*S/normS + signal;
             end
         else
