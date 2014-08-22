@@ -1,6 +1,5 @@
-% makeDirectory(foldername,isWin)
+% makeDirectory(foldername)
 % Makes the folder if is does not exist.
-% isWin: set to 1 if on a windows environment
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Supratim Ray, 2008 
