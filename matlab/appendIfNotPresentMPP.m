@@ -1,7 +1,11 @@
 % strout = appendIfNotPresent(strin,tag)
 % Appends tag to strin unless it is present already
 
-function strout = appendIfNotPresent(strin,tag)
+% 1/10/14
+% 'MPP' appended to the program name so that it does not overload another
+% program by the same name in the CommonPrograms folder
+
+function strout = appendIfNotPresentMPP(strin,tag)
 
 if ~isempty(strin)
     if strcmp(strin(end-length(tag)+1:end),tag)

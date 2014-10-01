@@ -30,10 +30,10 @@ end
 
 % Open the file
 fn = [foldername L];
-makeDirectory(fn);
+makeDirectoryMPP(fn);
 
 fn1 = [fn 'ImportData_SIG/'];
-makeDirectory(fn1);
+makeDirectoryMPP(fn1);
 
 filename = [fn1 'sig.hdr'];
 fp = fopen(filename,'w');

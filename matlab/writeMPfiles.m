@@ -40,10 +40,10 @@ end
 
 
 fn = [foldername tag];
-makeDirectory(fn);
+makeDirectoryMPP(fn);
 
 fn1 = [fn 'ImportData_SIG/'];
-makeDirectory(fn1)
+makeDirectoryMPP(fn1)
 
 if N > 1    % More than one channel
     for cNum = 1:N

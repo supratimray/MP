@@ -20,7 +20,8 @@
 % Supratim Ray, 2008 
 % Distributed under the General Public License.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% Updates
+% 1/10/14: Minor name changes in some programss
 
 function importData(X,folderName,tag,signalRange,Fs,channelLabels)
 
@@ -42,9 +43,9 @@ if ~exist('Fs','var'),                   Fs = 1000;                      end
 if ~exist('channelLabels','var'),        channelLabels = 1:N;            end
 
 
-folderName=appendIfNotPresent(folderName,'/');
-tag=appendIfNotPresent(tag,'/');
-makeDirectory(folderName);
+folderName=appendIfNotPresentMPP(folderName,'/');
+tag=appendIfNotPresentMPP(tag,'/');
+makeDirectoryMPP(folderName);
 
 
 writeMPfiles(X,folderName,tag,signalRange);

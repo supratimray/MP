@@ -1,14 +1,16 @@
-% makeDirectory(foldername)
+% makeDirectoryMPP(foldername)
 % Makes the folder if is does not exist.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Supratim Ray, 2008 
 % Distributed under the General Public License.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Updates
+% 1/10/14: Minor name changes in some programs
 
-function makeDirectory(fn)
+function makeDirectoryMPP(fn)
 
 if isdir(fn)==0
     disp(['Creating directory ',fn]);
-    mkdir(platformSpecificName(fn));
+    mkdir(platformSpecificNameMPP(fn));
 end

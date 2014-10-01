@@ -1,3 +1,6 @@
+% This program was written by Dr. Bart Krekelberg while developing the code
+% to be windows compatible. Not used/maintained anymore.
+
 function [energy,frequency,signal,time,gaborInfo] = mp(S,varargin)
 % Run matching pursuit spectral analyis on the signal in S
 % 

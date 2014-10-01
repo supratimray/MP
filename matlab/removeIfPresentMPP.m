@@ -1,7 +1,7 @@
-% strout = removeIfPresent(strin,tag)
+% strout = removeIfPresentMPP(strin,tag)
 % Removes tag from strin if it is present
 
-function strout = removeIfPresent(strin,tag)
+function strout = removeIfPresentMPP(strin,tag)
 
 if ~isempty(strin)
     if ~strcmp(strin(end-length(tag)+1:end),tag)

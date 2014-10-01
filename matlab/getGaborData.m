@@ -12,10 +12,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Updates
 % 20/8/14: Minor changes to make the code work on all platforms
+% 1/10/14: Minor name changes for some programs
 
 function gaborInfo = getGaborData(folderName,tag,channelNum)
 
-fn = platformSpecificName(fullfile(folderName,tag,['GaborMP/mp0.bok.' conv2Str(channelNum-1)]));
+fn = platformSpecificNameMPP(fullfile(folderName,tag,['GaborMP/mp0.bok.' conv2Str(channelNum-1)]));
 fd = fopen(fn,'r');
 
 numAtoms=0;

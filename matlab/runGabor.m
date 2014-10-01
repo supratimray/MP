@@ -17,22 +17,22 @@
 function runGabor(foldername,tag,Numb_points,Max_iterations)
 
 if ispc
-    executable = ['"' fullfile(platformSpecificName(removeIfPresent(fileparts(mfilename('fullpath')),'matlab')),'source','gabord.exe') '"'];
+    executable = ['"' fullfile(platformSpecificNameMPP(removeIfPresentMPP(fileparts(mfilename('fullpath')),'matlab')),'source','gabord.exe') '"'];
 else
-    executable = fullfile(platformSpecificName(removeIfPresent(fileparts(mfilename('fullpath')),'matlab')),'source','gabord');
+    executable = fullfile(platformSpecificNameMPP(removeIfPresentMPP(fileparts(mfilename('fullpath')),'matlab')),'source','gabord');
 end
 
 if ~exist('Numb_points','var'),        Numb_points=1024;       end
 if ~exist('Max_iterations','var'),     Max_iterations=500;     end
 
-foldername=appendIfNotPresent(foldername,'/');
-tag=appendIfNotPresent(tag,'/');
+foldername=appendIfNotPresentMPP(foldername,'/');
+tag=appendIfNotPresentMPP(tag,'/');
 
 fnin = [foldername tag];
 fn = [fnin 'ImportData_SIG/GaborMP/'];
-makeDirectory(fn);
+makeDirectoryMPP(fn);
 fnout = [fnin 'GaborMP/'];
-makeDirectory(fnout);
+makeDirectoryMPP(fnout);
 
 Shift_points = Numb_points;
 
