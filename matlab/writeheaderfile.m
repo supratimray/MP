@@ -29,13 +29,13 @@ for i = 1:length(goodchannels)
 end
 
 % Open the file
-fn = [foldername L];
+fn = fullfile(foldername,L);
 makeDirectoryMPP(fn);
 
-fn1 = [fn 'ImportData_SIG/'];
+fn1 = fullfile(fn,'ImportData_SIG');
 makeDirectoryMPP(fn1);
 
-filename = [fn1 'sig.hdr'];
+filename = fullfile(fn1,'sig.hdr');
 fp = fopen(filename,'w');
 
 % Taking Data to generate file
@@ -112,7 +112,7 @@ fclose(fp);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Now we write the list file
-filename = [fn1 'sig.lst'];
+filename = fullfile(fn1,'sig.lst');
 fp = fopen(filename,'w');
 fprintf(fp,'%s\t%s\t%f\t%s\n',Name_template, 'Sat 1 Jan 2000 0:00',SignalLength*NumTrials/Samp_rate, '0.0000');
 fclose(fp);

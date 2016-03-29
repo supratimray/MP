@@ -17,7 +17,7 @@
 % Supratim Ray, 2008 
 % Distributed under the General Public License.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% 29/3/16: Minor changes with slashes/backslashes
 
 function writeMPfiles(X,foldername,tag,range)
 
@@ -38,21 +38,20 @@ else
     disp(['Taking signal from ' num2str(L1)  ' to ' num2str(L2)]); 
 end
 
-
-fn = [foldername tag];
+fn = fullfile(foldername,tag);
 makeDirectoryMPP(fn);
 
-fn1 = [fn 'ImportData_SIG/'];
-makeDirectoryMPP(fn1)
+fn1 = fullfile(fn,'ImportData_SIG');
+makeDirectoryMPP(fn1);
 
 if N > 1    % More than one channel
     for cNum = 1:N
         if cNum <= 10
-            fidw = fopen([fn1,'sig.dat.00',num2str(cNum-1)],'w');
+            fidw = fopen(fullfile(fn1,['sig.dat.00' num2str(cNum-1)]),'w');
         elseif cNum <= 100
-            fidw = fopen([fn1,'sig.dat.0',num2str(cNum-1)],'w');
+            fidw = fopen(fullfile(fn1,['sig.dat.0' num2str(cNum-1)]),'w');
         else
-            fidw = fopen([fn1,'sig.dat.',num2str(cNum-1)],'w');
+            fidw = fopen(fullfile(fn1,['sig.dat.' num2str(cNum-1)]),'w');
         end
 
         for k = 1:M
@@ -64,7 +63,7 @@ if N > 1    % More than one channel
     end
 
 else	% Only one channel
-    fidw = fopen([fn1,'sig.dat.000'],'w');
+    fidw = fopen(fullfile(fn1,'sig.dat.000'),'w');
     if M > 1	% More than 1 trial
         for k = 1:M
             TW = X(L1:L2,k);

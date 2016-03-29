@@ -22,6 +22,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Updates
 % 1/10/14: Minor name changes in some programss
+% 29/3/16: Minor changes with slashes/backslashes
 
 function importData(X,folderName,tag,signalRange,Fs,channelLabels)
 
@@ -34,19 +35,15 @@ else
 end
 
 if ~exist('folderName','var')
-    folderName = [pwd '/data/'];
+    folderName = fullfile(pwd,'data');
 end
 
-if ~exist('tag','var'),                  tag = 'test/';                  end
+if ~exist('tag','var'),                  tag = 'test';                   end
 if ~exist('signalRange','var'),          signalRange = [1 L];            end
 if ~exist('Fs','var'),                   Fs = 1000;                      end
 if ~exist('channelLabels','var'),        channelLabels = 1:N;            end
 
-
-folderName=appendIfNotPresentMPP(folderName,'/');
-tag=appendIfNotPresentMPP(tag,'/');
 makeDirectoryMPP(folderName);
-
 
 writeMPfiles(X,folderName,tag,signalRange);
 [EDF, goodChannels, numTrials] = getEDF(X,Fs,channelLabels);

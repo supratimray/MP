@@ -25,24 +25,21 @@ end
 if ~exist('Numb_points','var'),        Numb_points=1024;       end
 if ~exist('Max_iterations','var'),     Max_iterations=500;     end
 
-foldername=appendIfNotPresentMPP(foldername,'/');
-tag=appendIfNotPresentMPP(tag,'/');
-
-fnin = [foldername tag];
-fn = [fnin 'ImportData_SIG/GaborMP/'];
+fnin = fullfile(foldername,tag);
+fn = fullfile(fnin,'ImportData_SIG','GaborMP');
 makeDirectoryMPP(fn);
-fnout = [fnin 'GaborMP/'];
+fnout = fullfile(fnin,'GaborMP');
 makeDirectoryMPP(fnout);
 
 Shift_points = Numb_points;
 
 % Get information about the number of channels from the header file
-filename = [fnin 'ImportData_SIG/sig.hdr'];
+filename = fullfile(fnin,'ImportData_SIG','sig.hdr');
 Numb_chans = getFromFile(filename,'Numb_chans');
 All_chans = Numb_chans;
 
 % Create the control file (called local.ctl)
-filename = [fn 'local.ctl'];
+filename = fullfile(fn,'local.ctl');
 fp = fopen(filename,'w');
 
 fprintf(fp,'%s\n','# Template for running Gabor MP Analysis');
@@ -51,7 +48,7 @@ fprintf(fp,'%s\n','Numb_inputs=1');
 fprintf(fp,'%s\n','Numb_outputs=1');
 fprintf(fp,'%s\n','Mode=parallel');
 fprintf(fp,'%s\n','%INPUT');
-fprintf(fp,'%s%s\n','Path=',[fnin 'ImportData_SIG/']);
+fprintf(fp,'%s%s\n','Path=',fullfile(fnin,'ImportData_SIG'));
 fprintf(fp,'%s\n','Header_file=sig.hdr');
 fprintf(fp,'%s\n','Calibrate=1');
 fprintf(fp,'%s%d\n','Numb_points=',Numb_points);
